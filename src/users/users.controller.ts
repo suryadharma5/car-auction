@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Query, Patch, NotFoundException, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query, Patch, NotFoundException, UseInterceptors } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user-dto';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dtos/update-user-dto';
+import { SerializeInterceptor } from 'src/interceptors/serialize.interceptor';
 
 @Controller('auth')
 export class UsersController {
@@ -13,10 +14,10 @@ export class UsersController {
         return { message: 'User created successfully' }
     }
 
-    @UseInterceptors(ClassSerializerInterceptor)
+    @UseInterceptors(SerializeInterceptor)
     @Get('/:id')
     async findUser(@Param('id') id: string) {
-        console.log(id)
+        console.log('handler is running')
         const user = await this.userService.findOne(parseInt(id))
 
         if (!user) {
